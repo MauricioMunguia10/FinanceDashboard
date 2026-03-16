@@ -1,6 +1,6 @@
 ﻿namespace FinanceDashboard.Core;
 
-public class Class1
+public class Program
 {
 
 }
