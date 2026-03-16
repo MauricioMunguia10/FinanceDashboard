@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FinanceDashboard.API/FinanceDashboard.API.csproj" />
+  <Project Path="FinanceDashboard.Core/FinanceDashboard.Core.csproj" />
+  <Project Path="FinanceDashboard.Infrastructure/FinanceDashboard.Infrastructure.csproj" />
+</Solution>
