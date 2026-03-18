@@ -14,10 +14,6 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Transaction>()
-            .Property(t => t.Status)
-            .HasConversion<string>();
         
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
