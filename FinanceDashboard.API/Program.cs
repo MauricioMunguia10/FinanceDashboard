@@ -1,28 +1,26 @@
-using FinanceDashboard.Infrastructure.Data;
-using FinanceDashboard.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
+using FinanceDashboard.Infrastructure;
+using FinanceDashboard.API.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
-builder.Services.AddScoped<CsvImportService>();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+var endpointGroups = typeof(Program).Assembly.GetTypes()
+    .Where(t => t.IsSubclassOf(typeof(EndpointGroupBase)) && !t.IsAbstract);
 
-app.MapControllers();
+foreach (var type in endpointGroups)
+{
+    ((EndpointGroupBase)Activator.CreateInstance(type)!).Map(app);
+}
+
 app.Run();
