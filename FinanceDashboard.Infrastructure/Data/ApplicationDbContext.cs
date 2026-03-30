@@ -1,15 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using FinanceDashboard.Core.Entities;
 using FinanceDashboard.Core.Common;
-using FinanceDashboard.Core.Enums;
+using FinanceDashboard.Application.Common.Interfaces;
 
 namespace FinanceDashboard.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : DbContext(options), IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+    public DbSet<Account> Accounts => Set<Account>();
+    public DbSet<Category> Categories => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,20 +28,22 @@ public class ApplicationDbContext : DbContext
             }
         }
     }
-
+    
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker
             .Entries<BaseAuditableEntity>()
             .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
 
+        var utcNow = DateTime.UtcNow;
+
         foreach (var entry in entries)
         {
-            entry.Entity.LastModifiedAt = DateTime.UtcNow;
+            entry.Entity.LastModifiedAt = utcNow;
             
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = DateTime.UtcNow;
+                entry.Entity.CreatedAt = utcNow;
             }
         }
 
