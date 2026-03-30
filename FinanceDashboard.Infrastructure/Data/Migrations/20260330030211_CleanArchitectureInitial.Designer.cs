@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinanceDashboard.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260322021407_AddExtendedEntitiesAndHash")]
-    partial class AddExtendedEntitiesAndHash
+    [Migration("20260330030211_CleanArchitectureInitial")]
+    partial class CleanArchitectureInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,7 @@ namespace FinanceDashboard.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("FinanceDashboard.Core.Entities.Category", b =>
@@ -86,7 +86,7 @@ namespace FinanceDashboard.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FinanceDashboard.Core.Entities.Transaction", b =>

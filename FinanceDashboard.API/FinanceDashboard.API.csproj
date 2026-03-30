@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FinanceDashboard.Core\FinanceDashboard.Core.csproj" />
     <ProjectReference Include="..\FinanceDashboard.Infrastructure\FinanceDashboard.Infrastructure.csproj" />
+    <ProjectReference Include="..\FinanceDashboard.Application\FinanceDashboard.Application.csproj" />
   </ItemGroup>
 
 </Project>

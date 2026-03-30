@@ -1,5 +1,6 @@
 using FinanceDashboard.API.Common;
-using FinanceDashboard.Infrastructure.Services;
+using FinanceDashboard.Application.Transactions.Commands;
+using MediatR;
 
 namespace FinanceDashboard.API.Endpoints;
 
@@ -9,19 +10,25 @@ public class ImportEndpoints : EndpointGroupBase
     {
         app.MapGroup("api/imports")
             .WithTags("Imports")
+            .DisableAntiforgery()
             .MapPost("/track-wallet", UploadTrackWalletCsv);
     }
-
+    
     private static async Task<IResult> UploadTrackWalletCsv(
         IFormFile file, 
-        CsvImportService importService)
+        ISender sender)
     {
-        if (file.Length == 0) return Results.BadRequest("No file.");
+        if (file.Length == 0) 
+            return Results.BadRequest("No file uploaded.");
 
         await using var stream = file.OpenReadStream();
-        var result = await importService.ImportTrackWalletCsvAsync(stream);
+        
+        var command = new ImportTrackWalletCsvCommand(stream);
+        var result = await sender.Send(command);
 
-        //test
-        return Results.Ok(new { RecordsInserted = result });
+        return Results.Ok(new { 
+            Message = "Import completed successfully.", 
+            RecordsInserted = result 
+        });
     }
 }

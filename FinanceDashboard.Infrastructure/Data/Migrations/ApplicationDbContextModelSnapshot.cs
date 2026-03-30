@@ -51,7 +51,7 @@ namespace FinanceDashboard.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("FinanceDashboard.Core.Entities.Category", b =>
@@ -83,7 +83,7 @@ namespace FinanceDashboard.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FinanceDashboard.Core.Entities.Transaction", b =>

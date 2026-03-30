@@ -1,3 +1,4 @@
+using FinanceDashboard.Application.Common.Interfaces;
 using FinanceDashboard.Infrastructure.Data;
 using FinanceDashboard.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,11 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        services.AddScoped<CsvImportService>();
+        services.AddScoped<IApplicationDbContext>(provider => 
+            provider.GetRequiredService<ApplicationDbContext>());
 
+        services.AddScoped<ICsvImportService, CsvImportService>();
+        
         return services;
     }
 }
